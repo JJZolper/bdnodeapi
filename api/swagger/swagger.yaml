@@ -1,0 +1,57 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Better Doctor Node API
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /api/v1/doctors/search:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: doctor_search
+    get:
+      description: Returns the doctor information to the caller
+      # used as the method name of the controller
+      operationId: doctor_search
+      parameters:
+        - name: name
+          in: query
+          description: The name of the doctor to search for
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/DoctorSearchResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  DoctorSearchResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string

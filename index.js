@@ -1,8 +1,14 @@
+var SwaggerExpress = require('swagger-express-mw');
 var request = require('request');
 var elasticsearch = require('elasticsearch');
 var express = require('express');
 var fs = require('fs');
 var app = express();
+module.exports = app; // for testing
+
+var config = {
+  appRoot: __dirname // required config
+};
 
 // console.log(process.env);
 var connectionString = process.env.SEARCHBOX_URL;
@@ -74,8 +80,22 @@ app.get('/api/v1/doctors/search', function(req, resp) {
 
 });
 
+/*
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
+});
+*/
+
+SwaggerExpress.create(config, function(err, swaggerExpress) {
+  if (err) { throw err; }
+
+  // install middleware
+  swaggerExpress.register(app);
+
+  app.listen(app.get('port'), function() {
+    console.log('Node app is running on port', app.get('port'));
+  });
+
 });
 
 

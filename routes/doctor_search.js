@@ -22,6 +22,7 @@ var router = express.Router();
 
 // console.log(process.env);
 var connectionString = process.env.SEARCHBOX_URL;
+var bd_api_key = process.env.bd_api_key;
 
 var client = new elasticsearch.Client({
     host: connectionString
@@ -29,15 +30,11 @@ var client = new elasticsearch.Client({
 
 router.get('/api/v1/doctors/search', function (req, resp, next) {
 
-  console.log(req.query);
-
   var name = req.query.name;
 
-  console.log(name);
-
-  const api_key = '0e0a2cf386c18f688b9dc56ed67238bd';
+  const bd_api_key = '0e0a2cf386c18f688b9dc56ed67238bd';
   const options = {  
-      url: 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name + '&user_key=' + api_key,
+      url: 'https://api.betterdoctor.com/2016-03-01/doctors?name=' + name + '&user_key=' + bd_api_key,
       method: 'GET',
       headers: {
           'Accept': 'application/json',
@@ -89,4 +86,5 @@ router.get('/api/v1/doctors/search', function (req, resp, next) {
 })
 
 module.exports = router;
+
 

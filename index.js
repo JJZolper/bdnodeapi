@@ -1,5 +1,3 @@
-var request = require('request');
-var elasticsearch = require('elasticsearch');
 var express = require('express');
 var swaggerJSDoc = require('swagger-jsdoc');
 var routes = require('./routes/doctor_search');
@@ -58,6 +56,11 @@ app.use(express.static(__dirname + '/public'));
 app.use('/', routes);
 
 // serve swagger
+app.get('/', function(req, res) {
+  res.redirect('/api-docs');
+});
+
+// serve swagger
 app.get('/swagger.json', function(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
@@ -65,7 +68,7 @@ app.get('/swagger.json', function(req, res) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('404 Not Found');
   err.status = 404;
   next(err);
 });

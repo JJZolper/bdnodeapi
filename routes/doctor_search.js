@@ -1,22 +1,39 @@
-'use strict';
-
 var request = require('request');
 var elasticsearch = require('elasticsearch');
+var express = require('express');
+var router = express.Router();
+/**
+ * @swagger
+ * /api/v1/doctors/search:
+ *   get:
+ *     description: Returns the doctor information to the caller
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: name
+ *         in: query
+ *         description: The name of the doctor to search for
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successfully deleted
+ */
 
-module.exports = {
-  doctor_search: doctor_search
-};
-
-console.log(process.env);
+// console.log(process.env);
 var connectionString = process.env.SEARCHBOX_URL;
 
 var client = new elasticsearch.Client({
     host: connectionString
 });
 
-function doctor_search(req, resp) {
+router.get('/api/v1/doctors/search', function (req, resp, next) {
 
-  var name = req.swagger.params.name.value;
+  console.log(req.query);
+
+  var name = req.query.name;
+
+  console.log(name);
 
   const api_key = '0e0a2cf386c18f688b9dc56ed67238bd';
   const options = {  
@@ -69,4 +86,7 @@ function doctor_search(req, resp) {
 
   });
 
-}
+})
+
+module.exports = router;
+

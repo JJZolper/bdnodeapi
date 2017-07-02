@@ -1,30 +1,65 @@
-var SwaggerExpress = require('swagger-express-mw');
 var request = require('request');
 var elasticsearch = require('elasticsearch');
 var express = require('express');
-var fs = require('fs');
-var app = express();
-module.exports = app; // for testing
+var swaggerJSDoc = require('swagger-jsdoc');
 
-var config = {
-  appRoot: __dirname // required config
+var routes = require('./routes/doctor_search');
+
+var app = express();
+
+// swagger definition
+var swaggerDefinition = {
+  info: {
+    title: 'Better Doctor Node API w/ Swagger',
+    version: '1.0.0',
+    description: '',
+  },
+  host: 'localhost:5000',
+  basePath: '/',
 };
 
-// console.log(process.env);
-var connectionString = process.env.SEARCHBOX_URL;
+// options for the swagger docs
+var swaggeroptions = {
+  // import swaggerDefinitions
+  swaggerDefinition: swaggerDefinition,
+  // path to the API docs
+  apis: ['routes/*.js'],
+};
 
-var client = new elasticsearch.Client({
-    host: connectionString
-});
-
-app.set('port', (process.env.PORT || 5000));
-
-app.use(express.static(__dirname + '/public'));
+// initialize swagger-jsdoc
+var swaggerSpec = swaggerJSDoc(swaggeroptions);
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+app.use(express.static(__dirname + '/public'));
+
+app.use('/', routes);
+
+// serve swagger
+app.get('/swagger.json', function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+/*// console.log(process.env);
+var connectionString = process.env.SEARCHBOX_URL;
+
+var client = new elasticsearch.Client({
+    host: connectionString
+});*/
+
+app.set('port', (process.env.PORT || 5000));
+
+/*
 const api_key = '0e0a2cf386c18f688b9dc56ed67238bd';
 const options = {  
     url: 'https://api.betterdoctor.com/2016-03-01/doctors?name=Heather%20Fenimore&user_key=' + api_key,
@@ -79,23 +114,11 @@ app.get('/api/v1/doctors/search', function(req, resp) {
   });
 
 });
+*/
 
-/*
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-*/
 
-SwaggerExpress.create(config, function(err, swaggerExpress) {
-  if (err) { throw err; }
-
-  // install middleware
-  swaggerExpress.register(app);
-
-  app.listen(app.get('port'), function() {
-    console.log('Node app is running on port', app.get('port'));
-  });
-
-});
-
+module.exports = app;
 

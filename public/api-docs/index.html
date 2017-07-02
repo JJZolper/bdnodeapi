@@ -75,16 +75,16 @@ window.onload = function() {
     var hostname = "";
     if (location.hostname === "localhost")
     {
-        hostname = "localhost:5000";
+        hostname = "http://localhost:5000";
     }
     else
     {
-        hostname = "bdnodeapi.herokuapp.com";
+        hostname = "https://bdnodeapi.herokuapp.com";
     }
     
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "http://" + hostname + "/swagger.json",
+    url: hostname + "/swagger.json",
     dom_id: '#swagger-ui',
     presets: [
       SwaggerUIBundle.presets.apis,

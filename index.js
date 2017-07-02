@@ -67,6 +67,7 @@ app.use(function(req, res, next) {
 // Enable cross site sharing so jjzolper.com can reach heroku
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 

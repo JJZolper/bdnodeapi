@@ -6,15 +6,29 @@ var swaggerJSDoc = require('swagger-jsdoc');
 var routes = require('./routes/doctor_search');
 
 var app = express();
+var port = process.env.PORT || 8080;
+// local
+var hostname = '';
+if(process.env.HEROKU_APP_NAME === undefined)
+{
+  hostname = 'localhost:' + port;
+}
+// prod
+else
+{
+  var appname = process.env.HEROKU_APP_NAME;
+  hostname = appname + '.herokuapp.com';
+}
+app.locals.hostname = hostname;
 
 // swagger definition
 var swaggerDefinition = {
   info: {
-    title: 'Better Doctor Node API w/ Swagger',
+    title: 'Better Doctor Node API',
     version: '1.0.0',
     description: '',
   },
-  host: 'localhost:5000',
+  host: hostname,
   basePath: '/',
 };
 
@@ -56,8 +70,6 @@ var connectionString = process.env.SEARCHBOX_URL;
 var client = new elasticsearch.Client({
     host: connectionString
 });*/
-
-app.set('port', (process.env.PORT || 5000));
 
 /*
 const api_key = '0e0a2cf386c18f688b9dc56ed67238bd';
@@ -116,9 +128,11 @@ app.get('/api/v1/doctors/search', function(req, resp) {
 });
 */
 
+app.set('port', (port));
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
 module.exports = app;
+
 

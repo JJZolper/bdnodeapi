@@ -77,9 +77,13 @@ window.onload = function() {
     {
         hostname = "http://localhost:5000";
     }
-    else
+    else if (location.hostname.indexOf("jjzolper.com") !== -1)
     {
         hostname = "http://bdnodeapi.jjzolper.com";
+    }
+    else if (location.hostname.indexOf("herokuapp.com") !== -1)
+    {
+        hostname = "https://bdnodeapi.herokuapp.com";
     }
     
   // Build a system

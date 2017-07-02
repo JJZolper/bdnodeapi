@@ -64,6 +64,12 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+// Enable cross site sharing so jjzolper.com can reach heroku
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 /*// console.log(process.env);
 var connectionString = process.env.SEARCHBOX_URL;
 

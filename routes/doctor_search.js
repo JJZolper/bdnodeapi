@@ -17,7 +17,7 @@ var router = express.Router();
  *         type: string
  *     responses:
  *       200:
- *         description: Successfully deleted
+ *         description: Successfully retrieved the doctor information
  */
 
 // console.log(process.env);
